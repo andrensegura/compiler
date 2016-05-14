@@ -1,0 +1,102 @@
+--[[ Cradle code --]]
+
+--[[ Constant Declarations --]]
+
+tab = '\t'
+
+--[[ Variable Declarations --]]
+
+look = nil    -- Lookahead char
+
+--[[ Read New Character From Input Stream --]]
+
+function GetChar ()
+    look = io.read(1)
+end
+
+--[[ Report an Error --]]
+
+function Error (s)
+   io.write("\t\a")
+   io.write("Error: " .. s .. ".\n")
+end
+
+--[[ Report Error and Halt --]]
+
+function Abort (s)
+    Error(s)
+    os.exit()
+end
+
+--[[ Report What Was Expected --]]
+
+function Expected (s)
+    Abort(s .. " Expected")
+end
+
+--[[ Match a Specific Input Character --]]
+
+function Match (x)
+    if look == x then
+        GetChar()
+    else
+        Expected("'" .. x .. "'")
+    end
+end
+
+--[[ Recognize an Alpha Character --]]
+
+function IsAlpha (c)
+   if string.match(s, "%a") then return true else return false end
+end
+
+--[[ Recognize a Decimal Digit --]]
+
+function IsDigit (c)
+   if string.match(s, "%d") then return true else return false end
+end
+
+--[[ Recognize an Alphanumeric --]]
+
+function IsAlnum (c)
+    if string.match(c, "%w") then return true else return false end
+end
+
+--[[ Get an Identifier --]]
+
+function GetName ()
+    if not IsAlpha(look) then Expected('Name') end
+    GetChar()
+    return string.upper(look)
+end
+
+--[[ Get a Number --]]
+
+function GetNum ()
+    if not IsDigit(look) then Expected('Integer') end
+    GetChar()
+    return look
+end
+
+--[[ Output a String with Tab --]]
+
+function Emit(s)
+    print(TAB .. s)
+end
+
+--[[ Output a String with Tab and CRLF --]]
+
+function EmitLn(s)
+    Emit(s)
+    print()
+end
+   
+--[[ Initialize --]]
+
+function Init()
+    GetChar()
+end
+
+--[[ Main Program --]]
+
+Init()
