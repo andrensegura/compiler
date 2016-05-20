@@ -8,6 +8,7 @@ CR = '\n'
 --[[ Variable Declarations --]]
 
 look = nil    -- Lookahead char
+Table = {}
 
 --[[ Read New Character From Input Stream --]]
 
@@ -82,6 +83,14 @@ function Match (x)
     end
 end
 
+--[[ Recognize and Skip Over a Newline --]]
+
+function NewLine ()
+    if look == CR then
+        GetChar()
+    end
+end
+
 --[[ Get an Identifier --]]
 
 function GetName ()
@@ -141,6 +150,8 @@ function Factor()
         Match('(')
         returnVal = Expression()
         Match(')')
+    elseif IsAlpha(look) then
+        return Table[GetName()]
     else
         returnVal = GetNum()
     end
@@ -223,14 +234,35 @@ end
 function Assignment()
     Name = GetName()
     Match('=')
-    Expression()
-    EmitLn("LEA " .. Name .. "(PC),A0")
-    EmitLn("MOVE D0,(A0)")
+    Table[Name] = Expression()
+end
+
+--[[ Input Routine --]]
+
+function Input ()
+    Match('?')
+    Table[GetName()] = io.read(1)
+end
+
+--[[ Output Routine --]]
+
+function Output ()
+    Match('!')
+    print(Table[GetName()])
+end
+
+--[[ Initialize the Variable Area --]]
+
+function InitTable() -- i is a global table
+    for ascii = 65, 90 do
+        Table[string.char(ascii)] = 0
+    end
 end
 
 --[[ Initialize --]]
 
 function Init()
+    InitTable()
     GetChar()
     SkipWhite()
 end
@@ -238,4 +270,13 @@ end
 --[[ Main Program --]]
 
 Init()
-print(Expression())
+while look ~= '.' do
+    if look == '?' then
+        Input()
+    elseif look == '!' then
+        Output()
+    else
+        Assignment()
+    end
+    NewLine()
+end
