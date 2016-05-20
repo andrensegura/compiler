@@ -2,7 +2,7 @@
 
 --[[ Constant Declarations --]]
 
-tab = '\t'
+TAB = '\t'
 
 --[[ Variable Declarations --]]
 
@@ -47,13 +47,13 @@ end
 --[[ Recognize an Alpha Character --]]
 
 function IsAlpha (c)
-   if string.match(s, "%a") then return true else return false end
+   if string.match(c, "%a") then return true else return false end
 end
 
 --[[ Recognize a Decimal Digit --]]
 
 function IsDigit (c)
-   if string.match(s, "%d") then return true else return false end
+   if string.match(c, "%d") then return true else return false end
 end
 
 --[[ Recognize an Alphanumeric --]]
