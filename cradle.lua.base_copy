@@ -66,16 +66,14 @@ end
 
 function GetName ()
     if not IsAlpha(look) then Expected('Name') end
-    GetChar()
-    return string.upper(look)
+    return string.upper(look), GetChar()
 end
 
 --[[ Get a Number --]]
 
 function GetNum ()
     if not IsDigit(look) then Expected('Integer') end
-    GetChar()
-    return look
+    return look, GetChar()
 end
 
 --[[ Output a String with Tab --]]
